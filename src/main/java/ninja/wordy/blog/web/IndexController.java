@@ -9,10 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,10 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -40,11 +37,13 @@ public class IndexController {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    PasswordEncoder passwordEncoder = createPasswordEncoder();
 
     @RequestMapping({"", "/", "/index", "/results"})
     public ModelAndView index(@RequestParam(required = false) String searchTerm) {
@@ -55,7 +54,7 @@ public class IndexController {
             System.out.println("search term " + searchTerm);
             posts = search(searchTerm);
         } else {
-            Pageable pageable = new PageRequest(0, 10);
+            Pageable pageable = PageRequest.of(0, 10);
             posts = postRepository.findMostRecentPosts(pageable);
         }
         mav.addObject("posts", posts);
@@ -98,7 +97,7 @@ public class IndexController {
             return "signup";
         } else {
             redirectAttrs.addFlashAttribute("message", "User successfully added...");
-            user.setPassword(passwordEncoder.encodePassword(user.getPassword(), ""));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         }
         redirectAttrs.addFlashAttribute(user);
@@ -118,6 +117,12 @@ public class IndexController {
         return jdbcTemplate.query("select * from post where title like '%" + searchTerm + "%'", new BeanPropertyRowMapper<>(Post.class));
     }
 
+    private PasswordEncoder createPasswordEncoder() {
+        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("{MD5}", passwordEncoder);
+        return passwordEncoder;
+    }
 }
 
 
