@@ -67,18 +67,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static String getMd5(String input) {
         try {
-            // Static getInstance method is called with hashing SHA
             MessageDigest md = MessageDigest.getInstance("MD5");
 
-            // digest() method called
-            // to calculate message digest of an input
-            // and return array of byte
             byte[] messageDigest = md.digest(input.getBytes());
 
-            // Convert byte array into signum representation
             BigInteger no = new BigInteger(1, messageDigest);
 
-            // Convert message digest into hex value
             String hashtext = no.toString(16);
 
             while (hashtext.length() < 32) {
@@ -88,27 +82,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             return hashtext;
         }
 
-        // For specifying wrong message digest algorithms
         catch (NoSuchAlgorithmException e) {
             System.out.println("Exception thrown"
                     + " for incorrect algorithm: " + e);
             return null;
         }
     }
-
 }
-
-
-
-//        PasswordEncoder defaultEncoder = new PasswordEncoderFactories();
-//        String defaultIdForEncode = "noop";
-//
-//        Map<String, PasswordEncoder> encoders = new HashMap<>();
-//        encoders.put(defaultIdForEncode, defaultEncoder);
-//        DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder(defaultIdForEncode, encoders);
-//        passwordEncoder.setDefaultPasswordEncoderForMatches(defaultEncoder);
-
-
-//    public PasswordEncoder passwordEncoder() {
-//      return new MD5Encoder();
-//    }

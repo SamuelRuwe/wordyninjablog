@@ -19,9 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +31,8 @@ public class IndexController {
     @Autowired
     UserRepository userRepository;
 
-    PasswordEncoder passwordEncoder = passwordEncoder();
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -94,51 +92,6 @@ public class IndexController {
     }
     private List<Post> search(String searchTerm) {
         return jdbcTemplate.query("select * from post where title like '%" + searchTerm + "%'", new BeanPropertyRowMapper<>(Post.class));
-    }
-
-    public PasswordEncoder passwordEncoder() {
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return getMd5(charSequence.toString());
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return getMd5(charSequence.toString()).equals(s);
-            }
-        };
-    }
-
-    public static String getMd5(String input) {
-        try {
-            // Static getInstance method is called with hashing SHA
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            // digest() method called
-            // to calculate message digest of an input
-            // and return array of byte
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            // Convert byte array into signum representation
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            // Convert message digest into hex value
-            String hashtext = no.toString(16);
-
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-
-            return hashtext;
-        }
-
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
-            System.out.println("Exception thrown"
-                    + " for incorrect algorithm: " + e);
-            return null;
-        }
     }
 }
 

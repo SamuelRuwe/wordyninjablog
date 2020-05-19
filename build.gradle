@@ -21,24 +21,16 @@ plugins {
     id 'java'
     id 'war'
 }
-//apply plugin: 'spring-boot'
+
 apply plugin: 'java'
 apply plugin: 'war'
-//apply plugin: 'eclipse'
-//apply plugin: 'idea'
-//apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'docker'
-//apply plugin: 'org.flywaydb.flyway'
-//compile group: 'org.springframework.boot', name: 'spring-boot-properties-migrator', version: '2.3.0.RELEASE'
+
 group = 'javajudd'
 jar {
     baseName = 'wordyninjablog'
     version = '0.0.1-SNAPSHOT'
 }
-//war {
-//    name = 'wordyninjawar'
-//    version = '0.0.1-SNAPSHOT'
-//}
+
 configurations {
     providedRuntime
 }
@@ -48,40 +40,14 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation ("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-tomcat")
-    implementation ("org.apache.tomcat.embed:tomcat-embed-jasper")
-    implementation ("javax.servlet:jstl")
-    implementation ("org.springframework.security:spring-security-taglibs:3.2.7.RELEASE")
-    implementation ("org.sitemesh:sitemesh:3.0.0")
+    implementation("org.apache.tomcat.embed:tomcat-embed-jasper")
+    implementation("javax.servlet:jstl")
+    implementation("org.springframework.security:spring-security-taglibs:3.2.7.RELEASE")
+    implementation("org.sitemesh:sitemesh:3.0.0")
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
     compile group: 'org.springframework', name: 'spring-webmvc', version: '5.2.5.RELEASE'
-//    implementation ("org.flywaydb:flyway-core")
-//
-//    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
-//
-//eclipse {
-//    classpath {
-//         containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-//         containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11'
-//    }
-//}
-//
-//task wrapper {
-//    gradleVersion = '6.0'
-//}
-//
-//task buildDocker(type: Docker, dependsOn: build) {
-//  push = false
-//  applicationName = jar.baseName
-//  dockerfile = file('src/main/docker/Dockerfile')
-//  doFirst {
-//    copy {
-//      from war
-//      into stageDir
-//    }
-//  }
-//}
