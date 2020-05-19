@@ -16,15 +16,15 @@ buildscript {
     }
 }
 
-
 plugins {
     id 'org.springframework.boot' version '2.2.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
+    id 'war'
 }
 //apply plugin: 'spring-boot'
-//apply plugin: 'java'
-//apply plugin: 'war'
+apply plugin: 'java'
+apply plugin: 'war'
 //apply plugin: 'eclipse'
 //apply plugin: 'idea'
 //apply plugin: 'io.spring.dependency-management'
@@ -39,6 +39,11 @@ jar {
     baseName = 'wordyninjablog'
     version = '0.0.1-SNAPSHOT'
 }
+
+//war {
+//    name = 'wordyninjawar'
+//    version = '0.0.1-SNAPSHOT'
+//}
 configurations {
     providedRuntime
 }
@@ -57,8 +62,8 @@ dependencies {
     implementation ("javax.servlet:jstl")
     implementation ("org.springframework.security:spring-security-taglibs:3.2.7.RELEASE")
     implementation ("org.sitemesh:sitemesh:3.0.0")
-    implementation ("mysql:mysql-connector-java:5.1.36")
     implementation ("org.flywaydb:flyway-core")
+    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
 //
 //    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
