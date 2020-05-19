@@ -11,7 +11,6 @@ import java.io.StringWriter;
 @ControllerAdvice
 public class ErrorController {
 
-
     @ExceptionHandler(Exception.class)
     public ModelAndView handleError(Exception exception, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView();
@@ -26,6 +25,5 @@ public class ErrorController {
 
         return mav;
     }
-
 
 }

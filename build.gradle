@@ -12,10 +12,9 @@ buildscript {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.7.RELEASE"
         classpath("io.spring.gradle:dependency-management-plugin:1.0.9.RELEASE")
         classpath('se.transmode.gradle:gradle-docker:1.2')
-//        classpath("gradle.plugin.com.boxfuse.client:flyway-release:4.1.1")
+        classpath("gradle.plugin.com.boxfuse.client:flyway-release:4.1.1")
     }
 }
-
 plugins {
     id 'org.springframework.boot' version '2.2.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -30,16 +29,12 @@ apply plugin: 'war'
 //apply plugin: 'io.spring.dependency-management'
 //apply plugin: 'docker'
 //apply plugin: 'org.flywaydb.flyway'
-
 //compile group: 'org.springframework.boot', name: 'spring-boot-properties-migrator', version: '2.3.0.RELEASE'
-
 group = 'javajudd'
-
 jar {
     baseName = 'wordyninjablog'
     version = '0.0.1-SNAPSHOT'
 }
-
 //war {
 //    name = 'wordyninjawar'
 //    version = '0.0.1-SNAPSHOT'
@@ -52,7 +47,6 @@ targetCompatibility = 11
 repositories {
     mavenCentral()
 }
-
 dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation ("org.springframework.boot:spring-boot-starter-security")
@@ -62,8 +56,9 @@ dependencies {
     implementation ("javax.servlet:jstl")
     implementation ("org.springframework.security:spring-security-taglibs:3.2.7.RELEASE")
     implementation ("org.sitemesh:sitemesh:3.0.0")
-    implementation ("org.flywaydb:flyway-core")
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '5.2.5.RELEASE'
+//    implementation ("org.flywaydb:flyway-core")
 //
 //    testCompile("org.springframework.boot:spring-boot-starter-test")
 }

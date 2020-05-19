@@ -5,7 +5,7 @@
   Sign Up
 </h1>
 
-<form:form method="POST" commandName="user">
+<form:form method="POST" modelAttribute="user">
   <div class="form-group <c:if test="${requestScope['org.springframework.validation.BindingResult.user'].hasFieldErrors('username')}">has-error</c:if>">
     <form:label path="username" cssClass="control-label" >Username:</form:label>
     <form:input path="username" cssClass="form-control" />

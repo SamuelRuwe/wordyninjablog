@@ -8,17 +8,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Configuration
 @EnableWebMvcSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    static PasswordEncoder passwordEncoder;
 
     @Autowired
     UserService userService;
@@ -49,20 +47,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return passwordEncoder;
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence charSequence) {
+                return getMd5(charSequence.toString());
+            }
+
+            @Override
+            public boolean matches(CharSequence charSequence, String s) {
+                return getMd5(charSequence.toString()).equals(s);
+            }
+        };
     }
 
+    public static String getMd5(String input) {
+        try {
+            // Static getInstance method is called with hashing SHA
+            MessageDigest md = MessageDigest.getInstance("MD5");
 
-    static {
-        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        Map<String, PasswordEncoder> encoders = new HashMap<>();
-        encoders.put("{MD5}", passwordEncoder);
+            // digest() method called
+            // to calculate message digest of an input
+            // and return array of byte
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String hashtext = no.toString(16);
+
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+
+            return hashtext;
+        }
+
+        // For specifying wrong message digest algorithms
+        catch (NoSuchAlgorithmException e) {
+            System.out.println("Exception thrown"
+                    + " for incorrect algorithm: " + e);
+            return null;
+        }
     }
+
 }
 
 
